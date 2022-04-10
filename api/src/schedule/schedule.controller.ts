@@ -24,7 +24,6 @@ export class ScheduleController {
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto, @GetUser() user: User) {
-    console.log('USER ID', user);
     return this.scheduleService.create(user, createScheduleDto.schedules);
   }
 

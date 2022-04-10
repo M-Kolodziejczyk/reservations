@@ -10,10 +10,13 @@ export class Reservation {
   title: string;
 
   @Column()
-  date: Date;
+  from: Date;
 
   @Column()
-  status: 'NEW' | 'BLOCKED';
+  to: Date;
+
+  @Column()
+  status: string;
 
   @ManyToOne(() => User, (user) => user.reservations)
   user: User;

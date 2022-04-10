@@ -1,14 +1,19 @@
-import { Repository } from 'typeorm';
+import {
+  Between,
+  Equal,
+  LessThan,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DateUtils } from 'typeorm/util/DateUtils';
 
 import { Schedule } from './entities/schedule.entity';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import {
-  CreateScheduleDto,
-  CreateScheduleInput,
-} from './dto/create-schedule.dto';
 import { User } from '../users/entities/user.entity';
+import { CreateScheduleInput } from './dto/create-schedule.dto';
 
 @Injectable()
 export class ScheduleService {
@@ -26,6 +31,30 @@ export class ScheduleService {
       console.log(res);
     }
     return 'This action adds a new schedule';
+  }
+
+  async checkAvailability(userId: number, date: string) {
+    const dateFormat = DateUtils.mixedDateToUtcDatetimeString(date);
+    const newDate = new Date(date);
+    const datePlusHour = new Date(newDate.setHours(newDate.getHours() + 1));
+
+    const datePlusHourFormat =
+      DateUtils.mixedDateToUtcDatetimeString(datePlusHour);
+
+    try {
+      const result = await this.scheduleRepository.find({
+        where: {
+          user: {
+            id: userId,
+          },
+          from: LessThanOrEqual(dateFormat),
+          to: MoreThanOrEqual(datePlusHourFormat),
+        },
+      });
+      return result;
+    } catch (error) {
+      console.log('ERROR: ', error);
+    }
   }
 
   findAll() {

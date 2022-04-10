@@ -1,0 +1,16 @@
+### Create a reservation
+POST http://localhost:3333/reservation
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdDNAdGVzdC5jb20iLCJpYXQiOjE2NDk1OTcxMDYsImV4cCI6MTY0OTY4MzUwNn0.PXhvj_J3GUn2bAeha8yN4_JK4O78MUwmGFFatR8KiNg
+
+{
+  "title": "Fryzjer",
+  "date": "2022-04-11T13:00:00+0000"
+
+}
+
+### Create a new user
+GET  http://localhost:3333/reservation
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdDNAdGVzdC5jb20iLCJpYXQiOjE2NDk1ODU0NDksImV4cCI6MTY0OTY3MTg0OX0.-EoJTWohMMck7XpcxDtrU9tS1L3bdy0ZSi52KatReg0
+
