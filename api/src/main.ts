@@ -9,6 +9,9 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transformOptions: {
+        enableImplicitConversion: true, // allow conversion underneath
+      },
     }),
   );
   await app.listen(3333);
