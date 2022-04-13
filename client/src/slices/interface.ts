@@ -8,3 +8,27 @@ export interface AuthState {
   isAuthenticated: boolean;
   message: string;
 }
+
+export interface ScheduleState {
+  schedules: [];
+  reservations: [];
+  message: "";
+  statistics: Statistic[];
+}
+
+export interface Statistic {
+  date: string;
+  reservations: number;
+  available: number;
+  blocked: number;
+}
+
+export interface ReservationInput {
+  title: string;
+  date: string;
+}
+
+export interface ScheduleInput {
+  from: string;
+  to: string;
+}

@@ -1,0 +1,10 @@
+.reservationPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__schedule {
+    margin-left: 1rem;
+  }
+}

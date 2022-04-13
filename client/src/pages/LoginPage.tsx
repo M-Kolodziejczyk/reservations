@@ -1,36 +1,32 @@
 import * as Yup from "yup";
 import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
-import { register } from "../slices/auth";
+import { login } from "../slices/auth";
 import { clearMessage } from "../slices/auth";
 import { AuthInput } from "../slices/interface";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 
-import styles from "./Register.module.scss";
+import styles from "./LoginPage.module.scss";
 
-interface RegisterInput extends AuthInput {
-  passwordConfirm: string;
-}
-
-const Register = () => {
+function LoginPage() {
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [successful, setSuccessful] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(clearMessage());
-
     return () => {
       dispatch(clearMessage());
     };
   }, [dispatch]);
 
-  const initialValues: RegisterInput = {
+  const initialValues: AuthInput = {
     email: "",
     password: "",
-    passwordConfirm: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -40,43 +36,38 @@ const Register = () => {
     password: Yup.string()
       .min(6, "Hasło musi mieć minimum 6 znaków")
       .required("Hasło jest wymagane"),
-    passwordConfirm: Yup.string().oneOf(
-      [Yup.ref("password"), null],
-      "Hasła nie są takie same"
-    ),
   });
 
-  const handleRegister = (formValue: AuthInput) => {
-    setSuccessful(false);
+  const handleLogin = (formValue: AuthInput) => {
     setLoading(true);
-
-    dispatch(register(formValue))
+    dispatch(login(formValue))
       .unwrap()
       .then(() => {
-        setSuccessful(true);
         setLoading(false);
       })
       .catch(() => {
         setLoading(false);
-        setSuccessful(false);
       });
   };
 
-  return (
-    <div className={styles.registerPage}>
-      <h1>Rejestracja</h1>
+  if (isAuthenticated) {
+    return <Navigate to="/reservations" />;
+  }
 
+  return (
+    <div className={styles.loginPage}>
+      <h1>Logowanie</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleRegister}
+        onSubmit={handleLogin}
       >
         <Form className={styles.form}>
           <div className={styles.formGroup}>
             <label className={styles.formLabel} htmlFor="email">
               Email
             </label>
-            <Field name="email" type="email" className={styles.formInput} />
+            <Field name="email" type="text" className={styles.formInput} />
             <ErrorMessage
               name="email"
               component="div"
@@ -84,9 +75,7 @@ const Register = () => {
             />
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.formLabel} htmlFor="password">
-              Hasło
-            </label>
+            <label htmlFor="password">Hasło</label>
             <Field
               name="password"
               type="password"
@@ -94,37 +83,22 @@ const Register = () => {
             />
             <ErrorMessage
               name="password"
-              component="div"
-              className={styles.errorMessage}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel} htmlFor="passwordConfirm">
-              Powtórz hasło
-            </label>
-            <Field
-              name="passwordConfirm"
-              type="password"
-              className={styles.formInput}
-            />
-            <ErrorMessage
-              name="passwordConfirm"
               component="div"
               className={styles.errorMessage}
             />
           </div>
           <div className={styles.formGroup}>
             <button type="submit" className={styles.button} disabled={loading}>
-              Zarejestruj
+              <span>Login</span>
             </button>
           </div>
         </Form>
       </Formik>
       {message && (
         <div
-          className={`${styles.message} ${
-            successful ? styles.success : styles.danger
-          }`}
+          // className={`${styles.message} ${
+          //   successful ? styles.success : styles.danger
+          // }`}
           role="alert"
         >
           {message}
@@ -132,5 +106,6 @@ const Register = () => {
       )}
     </div>
   );
-};
-export default Register;
+}
+
+export default LoginPage;

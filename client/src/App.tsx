@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { logout } from "./slices/auth";
 import { useAppDispatch, useAppSelector } from "./hooks/redux";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Profile from "./components/Reservations";
+import Login from "./pages/LoginPage";
+import Register from "./pages/RegisterPage";
+import ReservationPage from "./pages/ReservationPage";
 import PrivateRoute from "./components/PrivateRoute";
 
 import styles from "./App.module.scss";
@@ -23,7 +23,7 @@ const App = () => {
       <div className={styles.app}>
         <nav className={styles.nav}>
           {isAuthenticated ? (
-            <a href="/login" className={styles.navBtn} onClick={logoutHandler}>
+            <a href="/" className={styles.navBtn} onClick={logoutHandler}>
               Wyloguj
             </a>
           ) : (
@@ -47,7 +47,7 @@ const App = () => {
               path="/reservations"
               element={
                 <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Profile />
+                  <ReservationPage />
                 </PrivateRoute>
               }
             />

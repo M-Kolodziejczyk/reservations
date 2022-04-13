@@ -1,0 +1,106 @@
+.reservation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__schedule {
+    margin-left: 1rem;
+  }
+
+  &__container {
+    display: flex;
+    margin-top: 4rem;
+    justify-content: space-between;
+    &__formContainer {
+      .header {
+        text-align: center;
+      }
+
+      .form {
+        margin: 0 2rem;
+        width: 400px;
+
+        .formGroup {
+          margin-top: 1rem;
+          display: flex;
+          flex-direction: column;
+
+          .formLabel {
+            margin-bottom: 0.5rem;
+          }
+
+          .formInput {
+            border: 1px solid lightgray;
+            border-radius: 12px;
+            padding: 0.5rem;
+          }
+
+          .errorMessage {
+            margin-top: 0.5rem;
+            color: red;
+          }
+
+          .button {
+            border: 0;
+            font-size: 16px;
+            font-weight: 600;
+            justify-content: center;
+            line-height: 20px;
+            background-color: #0a66c2;
+            border-radius: 12px;
+            padding: 5px;
+            border-radius: 100px;
+            box-sizing: border-box;
+            color: #ffffff;
+            cursor: pointer;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            &:hover,
+            &:focus {
+              background-color: #16437e;
+              color: #ffffff;
+            }
+          }
+        }
+      }
+    }
+    &__btn {
+      margin-top: 3rem;
+      border: 0;
+      font-size: 16px;
+      font-weight: 600;
+      justify-content: center;
+      line-height: 20px;
+      background-color: #0a66c2;
+      border-radius: 12px;
+      padding: 5px;
+      border-radius: 100px;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      padding-left: 20px;
+      padding-right: 20px;
+
+      &:hover,
+      &:focus {
+        background-color: #16437e;
+        color: #ffffff;
+      }
+    }
+
+    .message {
+      margin-top: 1rem;
+      color: red;
+    }
+  }
+
+  &__statistic {
+    margin-top: 3rem;
+
+    &__item {
+      margin-top: 1rem;
+    }
+  }
+}

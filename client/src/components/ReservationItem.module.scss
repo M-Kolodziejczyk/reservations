@@ -1,0 +1,43 @@
+.reservationItem {
+  border: 1px solid lightgray;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+
+  &__title {
+    margin: 0 0 0.5rem 0;
+  }
+
+  &__date {
+    margin: 0;
+  }
+
+  &__buttons {
+    margin-top: 1rem;
+    display: flex;
+
+    &__btn {
+      border: 0;
+      font-size: 16px;
+      font-weight: 600;
+      justify-content: center;
+      line-height: 20px;
+      background-color: #0a66c2;
+      border-radius: 12px;
+      padding: 5px;
+      border-radius: 100px;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      padding-left: 20px;
+      padding-right: 20px;
+      margin-right: 2rem;
+
+      &:hover,
+      &:focus {
+        background-color: #16437e;
+        color: #ffffff;
+      }
+    }
+  }
+}

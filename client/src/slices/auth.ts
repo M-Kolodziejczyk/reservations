@@ -40,10 +40,9 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }: AuthInput, thunkAPI) => {
     try {
-      console.log("EMAIL", email);
-      const data = await AuthService.login(email, password);
-      console.log("DATA:", data);
-      return { user: data };
+      const response = await AuthService.login(email, password);
+      console.log("Response", response);
+      return response;
     } catch (error: any) {
       const message =
         (error.response &&
@@ -59,7 +58,6 @@ export const login = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("auth/logout", async () => {
-  console.log("logout");
   await AuthService.logout();
 });
 
@@ -81,19 +79,14 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (buildier) => {
-    buildier.addCase(login.fulfilled, (state, { payload }) => {
-      console.log("ACTION: ", payload);
-      console.log("USER ", token);
+    buildier.addCase(login.fulfilled, (state) => {
       state.isAuthenticated = true;
-      state.user = payload.user;
     });
-    buildier.addCase(login.rejected, (state, action) => {
+    buildier.addCase(login.rejected, (state) => {
       state.isAuthenticated = false;
-      state.user = null;
     });
-    buildier.addCase(logout.fulfilled, (state, action) => {
+    buildier.addCase(logout.fulfilled, (state) => {
       state.isAuthenticated = false;
-      state.user = null;
     });
   },
 });
