@@ -1,13 +1,13 @@
 import { promisify } from 'util';
+import { JwtService } from '@nestjs/jwt';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import {
   Injectable,
-  BadRequestException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_scrypt);
 
@@ -19,7 +19,7 @@ export class AuthService {
     const users = await this.usersService.findByEmail(email);
 
     if (users.length) {
-      throw new BadRequestException('email in use');
+      throw new BadRequestException('Email jest zajęty');
     }
 
     const salt = randomBytes(8).toString('hex');
@@ -35,7 +35,7 @@ export class AuthService {
     const [user] = await this.usersService.findByEmail(email);
 
     if (!user) {
-      throw new NotFoundException('Credentials incorrect');
+      throw new NotFoundException('Błędne dane logowania');
     }
 
     const [salt, storedHash] = user.hash.split('.');
@@ -43,7 +43,7 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
 
     if (hash.toString('hex') !== storedHash) {
-      throw new BadRequestException('Credentials incorrect');
+      throw new BadRequestException('Błędne dane logowania');
     }
 
     return this.signToken(user.id, user.email);
@@ -56,7 +56,7 @@ export class AuthService {
     const payload = { sub: userId, email };
 
     // TODO!!!
-    // change to  env variable
+    // change to env variable
     const secret = 'secret';
 
     const token = await this.jwt.signAsync(payload, {

@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
@@ -14,9 +15,6 @@ export class Reservation {
 
   @Column()
   to: Date;
-
-  @Column()
-  status: string;
 
   @ManyToOne(() => User, (user) => user.reservations)
   user: User;

@@ -3,8 +3,8 @@ POST http://localhost:3333/auth/signup
 content-type: application/json
 
 {
-  "email": "test3@test.com",
-  "password": "asdhsadas"
+  "email": "test@test.pl",
+  "password": "Zaq12wsx"
 }
 
 ### Signin
@@ -12,11 +12,9 @@ POST http://localhost:3333/auth/signin
 content-type: application/json
 
 {
-  "email": "test3@test.com", 
-  "password": "asdhsadas"
+  "email": "test@test.pl", 
+  "password": "Zaq12wsx"
 }
 
-### TEST
-GET http://localhost:3333/auth/user
-content-type: application/json
+
 

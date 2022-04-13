@@ -1,18 +1,10 @@
-import {
-  Between,
-  Equal,
-  LessThan,
-  LessThanOrEqual,
-  MoreThanOrEqual,
-  Repository,
-} from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { DateUtils } from 'typeorm/util/DateUtils';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 
-import { Schedule } from './entities/schedule.entity';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { User } from '../users/entities/user.entity';
+import { Schedule } from './entities/schedule.entity';
 import { CreateScheduleInput } from './dto/create-schedule.dto';
 
 @Injectable()
@@ -23,17 +15,21 @@ export class ScheduleService {
   ) {}
 
   async create(user: User, schedules: CreateScheduleInput[]) {
+    const savedSchedules = [];
+
     for (const scheduleItem of schedules) {
       const schedule = this.scheduleRepository.create(scheduleItem);
       schedule.user = user;
 
-      const res = await this.scheduleRepository.save(schedule);
-      console.log(res);
+      const savedSchedule = await this.scheduleRepository.save(schedule);
+
+      savedSchedules.push(savedSchedule);
     }
-    return 'This action adds a new schedule';
+
+    return savedSchedules;
   }
 
-  async checkAvailability(userId: number, date: string) {
+  checkAvailability(userId: number, date: string) {
     const dateFormat = DateUtils.mixedDateToUtcDatetimeString(date);
     const newDate = new Date(date);
     const datePlusHour = new Date(newDate.setHours(newDate.getHours() + 1));
@@ -41,37 +37,27 @@ export class ScheduleService {
     const datePlusHourFormat =
       DateUtils.mixedDateToUtcDatetimeString(datePlusHour);
 
-    try {
-      const result = await this.scheduleRepository.find({
-        where: {
-          user: {
-            id: userId,
-          },
-          from: LessThanOrEqual(dateFormat),
-          to: MoreThanOrEqual(datePlusHourFormat),
+    return this.scheduleRepository.find({
+      where: {
+        user: {
+          id: userId,
         },
-      });
-      return result;
-    } catch (error) {
-      console.log('ERROR: ', error);
-    }
+        from: LessThanOrEqual(dateFormat),
+        to: MoreThanOrEqual(datePlusHourFormat),
+      },
+    });
   }
 
-  findAll() {
-    const schedules = this.scheduleRepository.find();
-    console.log('Schedules', schedules);
-    return schedules;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} schedule`;
-  }
-
-  update(id: number, updateScheduleDto: UpdateScheduleDto) {
-    return `This action updates a #${id} schedule`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} schedule`;
+  findUserSchedule(userId: number) {
+    return this.scheduleRepository.find({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+      order: {
+        from: 'ASC',
+      },
+    });
   }
 }

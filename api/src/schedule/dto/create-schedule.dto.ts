@@ -1,13 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsEmail,
-  IsString,
-  IsArray,
-  ValidateNested,
-  IsDate,
-  IsDateString,
-} from 'class-validator';
-import { Schedule } from '../entities/schedule.entity';
+import { IsArray, ValidateNested, IsDateString } from 'class-validator';
 
 export class CreateScheduleInput {
   @IsDateString()

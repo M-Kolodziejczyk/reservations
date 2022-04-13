@@ -1,13 +1,17 @@
-import { Between, Repository } from 'typeorm';
+import { differenceInHours } from 'date-fns';
 import { DateUtils } from 'typeorm/util/DateUtils';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 
 import { User } from '../users/entities/user.entity';
 import { Reservation } from './entities/reservation.entity';
 import { ScheduleService } from 'src/schedule/schedule.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
 
 @Injectable()
 export class ReservationService {
@@ -37,8 +41,8 @@ export class ReservationService {
       title,
       from: date,
       to: datePlusHour.toISOString(),
-      status: 'new',
     });
+
     reservation.user = user;
 
     const createdReservation = await this.reservationRepository.save(
@@ -81,25 +85,73 @@ export class ReservationService {
 
       return result;
     } catch (error) {
-      console.log('ERROR: ', error);
+      console.log(error);
     }
   }
 
-  async findAll() {
-    const res = await this.reservationRepository.find();
-    console.log('find all', res);
-    return res;
+  async getUserStatistics(userId: number) {
+    const schedules = await this.scheduleService.findUserSchedule(userId);
+    const statistics = [];
+
+    for (const schedule of schedules) {
+      const reservations = await this.userReservationsBetweenHours(
+        userId,
+        schedule.from,
+        schedule.to,
+      );
+      const scheduleHours = differenceInHours(
+        new Date(schedule.to),
+        new Date(schedule.from),
+      );
+
+      const stat = {
+        date: schedule.from,
+        reservations: reservations.length,
+        available: scheduleHours - reservations.length,
+        blocked: reservations.length,
+      };
+
+      statistics.push(stat);
+    }
+
+    return statistics;
+  }
+
+  async userReservationsBetweenHours(userId: number, form: Date, to: Date) {
+    const fromDateFormated = DateUtils.mixedDateToUtcDatetimeString(form);
+    const toDateFormated = DateUtils.mixedDateToUtcDatetimeString(to);
+
+    return this.reservationRepository.find({
+      where: {
+        user: {
+          id: userId,
+        },
+        from: MoreThanOrEqual(fromDateFormated),
+        to: LessThanOrEqual(toDateFormated),
+      },
+    });
+  }
+
+  findUserReservations(id: number) {
+    return this.reservationRepository.find({
+      where: {
+        user: {
+          id: id,
+        },
+      },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} reservation`;
+    return this.reservationRepository.findOne(id);
   }
 
-  update(id: number, updateReservationDto: UpdateReservationDto) {
-    return `This action updates a #${id} reservation`;
-  }
+  async remove(id: number) {
+    const reservation = await this.findOne(id);
+    if (!reservation) {
+      throw new NotFoundException('Brak rezerwacji');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} reservation`;
+    return this.reservationRepository.remove(reservation);
   }
 }

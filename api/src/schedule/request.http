@@ -1,7 +1,7 @@
 ### Create user schedule
 POST http://localhost:3333/schedule
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdDNAdGVzdC5jb20iLCJpYXQiOjE2NDk1ODU0NDksImV4cCI6MTY0OTY3MTg0OX0.-EoJTWohMMck7XpcxDtrU9tS1L3bdy0ZSi52KatReg0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoidGVzdEB0ZXN0LnBsIiwiaWF0IjoxNjQ5ODI2MzA2LCJleHAiOjE2NDk5MTI3MDZ9.83oY8tDvXntD93V5h3ITWmaZ_KZod_aswEelP26KYEI
 
 {
 "schedules": [
@@ -9,8 +9,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsI
 ]
 }
 
-### GET ALL schedules
+### GET user schedules
 GET  http://localhost:3333/schedule
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdDNAdGVzdC5jb20iLCJpYXQiOjE2NDk1ODU0NDksImV4cCI6MTY0OTY3MTg0OX0.-EoJTWohMMck7XpcxDtrU9tS1L3bdy0ZSi52KatReg0
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoidGVzdEB0ZXN0LnBsIiwiaWF0IjoxNjQ5ODI2MzA2LCJleHAiOjE2NDk5MTI3MDZ9.83oY8tDvXntD93V5h3ITWmaZ_KZod_aswEelP26KYEI
